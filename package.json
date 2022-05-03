@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "watch": "webpack --watch --mode=development",
-    "build": "webpack --mode=production"
+    "build": "webpack --mode=production",
+    "open": "concurrently \"http-server -c-1 -a localhost -p 3000\" \"open http://localhost:3000\"",
+    "start": "concurrently \"npm run watch\" \"npm run open\""
   },
   "repository": {
     "type": "git",
@@ -24,18 +26,21 @@
     "@babel/preset-env": "^7.17.10",
     "@babel/preset-react": "^7.16.7",
     "babel-loader": "^8.2.5",
+    "concurrently": "^7.1.0",
+    "core-js": "^3.22.4",
+    "css-loader": "^6.7.1",
+    "http-server": "^14.1.0",
+    "mini-css-extract-plugin": "^2.6.0",
+    "phaser": "^3.55.2",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
     "react-redux": "^8.0.1",
     "react-router-dom": "^6.3.0",
     "redux": "^4.2.0",
     "redux-logger": "^3.0.6",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2",
-    "css-loader": "^6.7.1",
-    "mini-css-extract-plugin": "^2.6.0",
-    "phaser": "^3.55.2",
     "sass": "^1.51.0",
-    "sass-loader": "^12.6.0"
+    "sass-loader": "^12.6.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
   }
 }

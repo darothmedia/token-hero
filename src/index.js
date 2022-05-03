@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { TextButton } from "./gameObjects/textButton";
 
 const config = {
   type: Phaser.CANVAS,
@@ -31,5 +32,17 @@ const config = {
 const game = new Phaser.Game(config)
 
 function preload(){};
-function create(){};
+function create(){
+  let { width, height } = this.sys.game.canvas;
+  this.add.text(width / 2, height / 2 - 45, 'Token Hero', {
+    font: 'bold 72px "VT323"',
+  }).setOrigin(0.5);
+
+  this.newButton = new TextButton(this, width / 2, height / 2 + 45, 'START', {
+    font: 'bold 52px "VT323"'
+  }).setOrigin(0.5);
+
+  this.add.existing(this.newButton)
+
+};
 function update(){};
