@@ -5,14 +5,14 @@ export class TextButton extends Phaser.GameObjects.Text {
     super(scene, x, y, text, style);
 
     this.setInteractive({ useHandCursor: true })
-      .on('pointerover', () => this.enterButtonHoverState())
-      .on('pointerout', () => this.enterButtonRestState())
-      .on('pointerdown', () => this.enterButtonActiveState())
-      .on('pointerup', () => this.enterButtonHoverState());
+      .on('pointerover', this.enterButtonHoverState, this)
+      .on('pointerout', this.enterButtonRestState, this)
+      .on('pointerdown', this.enterButtonActiveState, this)
+      .on('pointerup', this.enterButtonHoverState, this);
   }
 
   enterButtonHoverState() {
-    this.setStyle({ fill: '#ff0' });
+    this.setStyle({ fill: '#f9f' });
   }
 
   enterButtonRestState() {
