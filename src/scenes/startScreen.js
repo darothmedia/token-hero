@@ -1,9 +1,9 @@
 import Phaser from "phaser";
 import { TextButton } from "../gameObjects/textButton";
 
-export class StartScreen extends Phaser.Scene {
-  initialize() {
-    Phaser.Scene.call(this, { "key": "StartScreen" })
+export default class StartScreen extends Phaser.Scene {
+  constructor(){
+    super('StartScreen');
   }
   create(){
     let { width, height } = this.sys.game.canvas;

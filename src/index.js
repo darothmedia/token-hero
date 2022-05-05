@@ -1,7 +1,7 @@
 import Phaser from "phaser";
 import gameConfig from "./config/gameConfig";
-import { Level1 } from "./scenes/level1";
-import { StartScreen } from "./scenes/startScreen";
+import Level1 from "./scenes/level1";
+import StartScreen from "./scenes/startScreen";
 
 const game = new Phaser.Game(gameConfig)
 
