@@ -31,6 +31,10 @@ export default class Level extends Phaser.Scene {
     })
   }
 
+  init(data){
+    if (data.points) this.points += data.points
+  }
+
   create(){
     let { width, height } = this.sys.game.canvas;
     let title = this.add.text(width / 2, height / 2, 'LEVEL ' + this.level, {
@@ -72,7 +76,7 @@ export default class Level extends Phaser.Scene {
 
   update(){
     this.scoreText && this.scoreText.setText(this.points.toString() + ' BTC', { align: 'right' })
-    this.count >= 5 && this.scene.start(this.level + '_End', {points: this.points})
+    this.count >= 20 && this.scene.start(this.level + '_End', {points: this.points})
   }
 
   addKey(width, height, alphabet){
