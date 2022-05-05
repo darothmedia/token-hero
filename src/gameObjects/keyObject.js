@@ -8,5 +8,6 @@ export default class KeyObject extends Phaser.GameObjects.Sprite {
   }
 
   create(){
+    
   }
 }
