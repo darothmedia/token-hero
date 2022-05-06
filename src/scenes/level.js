@@ -2,14 +2,16 @@ import Phaser from "phaser";
 import KeyObject from "../gameObjects/keyObject";
 
 export default class Level extends Phaser.Scene {
-  constructor(level, speed){
+  constructor(level, speed, cap=20){
     super(level);
     this.points = 0;
     this.usedKeys = {}
     this.scoreText = null;
     this.speed = speed;
     this.level = level;
-    this.count = 0;
+    this.pressCount = 0;
+    this.keyCount = 0;
+    this.cap = cap;
   }
 
   preload(){
@@ -32,7 +34,7 @@ export default class Level extends Phaser.Scene {
   }
 
   init(data){
-    if (data.points) this.points += data.points
+    if (data.points) this.points = data.points;
   }
 
   create(){
@@ -69,21 +71,26 @@ export default class Level extends Phaser.Scene {
     let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     this.time.addEvent({
       delay: this.speed / (parseInt(this.level) + 1),
-      callback: () => this.addKey(width - 112, height, alphabet),
+      callback: () => this.keyCount < this.cap && this.addKey(width - 112, height, alphabet),
       loop: true
     })
   }
 
   update(){
     this.scoreText && this.scoreText.setText(this.points.toString() + ' BTC', { align: 'right' })
-    this.count >= 20 && this.scene.start(this.level + '_End', {points: this.points})
+    if (this.pressCount >= this.cap) {
+      let points = this.points;
+      this.points = this.pressCount = this.keyCount = 0;
+      this.scene.start(this.level + '_End', {points: points});
+    }
   }
 
   addKey(width, height, alphabet){
-    let keyValue = Math.floor(Math.random() * 26)
+    let keyValue = Math.floor(Math.random() * 26);
+    this.keyCount++;
 
-    if (!this.usedKeys[keyValue]) this.usedKeys[keyValue] = 0
-    while (this.usedKeys[keyValue] > 0){ keyValue = Math.floor(Math.random() * 26) }
+    if (!this.usedKeys[keyValue]) this.usedKeys[keyValue] = 0;
+    while (this.usedKeys[keyValue] > 0){ keyValue = Math.floor(Math.random() * 26) };
     this.usedKeys[keyValue]++;
 
     let sprite = new KeyObject(this, width - Math.random() * width / 2, 0, 'keyboard', keyValue)
@@ -104,7 +111,7 @@ export default class Level extends Phaser.Scene {
       callback: () => {
         if (sprite.texture.key === 'keyboard') {
           this.points -= 50
-          this.count++
+          this.pressCount++
           let minus = this.add.text(sprite.x, sprite.y - 50, '-50', {
             font: 'bold 42px "VT323"',
             fill: '#FF0000'
@@ -118,20 +125,23 @@ export default class Level extends Phaser.Scene {
         };
         keyPress.destroy();
         sprite.destroy();
-        this.usedKeys[keyValue] --;
+        this.usedKeys[keyValue]--;
       },
       loop: false
     })
-
+    
     let keyPress = this.input.keyboard.addKey(alphabet[sprite.frame.name])
-    keyPress.on('down', () => this.keyDown(sprite))
+    keyPress.on('down', () => {
+      this.keyDown(sprite);
+      keyPress.destroy();
+    })
   }
 
   keyDown(sprite){
     if (sprite.y > 500 && sprite.y <= 560){
       sprite.setTexture('keyboard_y', sprite.frame.name)
       this.points += 50;
-      this.count++;
+      this.pressCount++;
       let fifty = this.add.text(sprite.x, sprite.y - 50, '+50', {
         font: 'bold 42px "VT323"',
         fill: '#FFFF00'
@@ -145,7 +155,7 @@ export default class Level extends Phaser.Scene {
     } else if (sprite.y > 560 && sprite.y < 600){
       sprite.setTexture('keyboard_g', sprite.frame.name)
       this.points += 100;
-      this.count++;
+      this.pressCount++;
       let hundred = this.add.text(sprite.x, sprite.y - 50, '+100', {
         font: 'bold 42px "VT323"',
         fill: '#00FF00'
@@ -159,7 +169,7 @@ export default class Level extends Phaser.Scene {
     } else {
       sprite.setTexture('keyboard_r', sprite.frame.name)
       this.points -= 20;
-      this.count++;
+      this.pressCount++;
       let twenty = this.add.text(sprite.x, sprite.y - 50, '-20', {
         font: 'bold 42px "VT323"',
         fill: '#FF0000'
