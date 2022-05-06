@@ -25,7 +25,7 @@ export default class GameOver extends Phaser.Scene {
       font: 'bold 52px "VT323"'
     })
       .setOrigin(0.5)
-      .on('pointerdown', () => this.scene.start('StartScreen'))
+      .on('pointerdown', () => this.scene.start('StartScreen', {score: 0}))
 
     this.add.existing(this.newButton)
   };

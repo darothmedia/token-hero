@@ -2,7 +2,7 @@ import Phaser from "phaser";
 import KeyObject from "../gameObjects/keyObject";
 
 export default class Level extends Phaser.Scene {
-  constructor(level, speed, cap=20){
+  constructor(level, speed, cap=5){
     super(level);
     this.points = 0;
     this.usedKeys = {}
@@ -78,10 +78,17 @@ export default class Level extends Phaser.Scene {
 
   update(){
     this.scoreText && this.scoreText.setText(this.points.toString() + ' BTC', { align: 'right' })
+    
     if (this.pressCount >= this.cap) {
       let points = this.points;
-      this.points = this.pressCount = this.keyCount = 0;
-      this.scene.start(this.level + '_End', {points: points});
+      this.time.addEvent({
+        delay: 1000,
+        callback: () => {
+          this.points = this.pressCount = this.keyCount = 0;
+          this.scene.start(this.level !== '3' ? this.level + '_End' : 'GameOver', { points: points })
+        },
+        loop: false
+      });
     }
   }
 
