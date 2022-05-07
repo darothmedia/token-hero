@@ -8,7 +8,7 @@ import GameOver from "./scenes/gameOver";
 const game = new Phaser.Game(gameConfig)
 
 game.scene.add('StartScreen', StartScreen, true)
-game.scene.add('Level1', new Level('1', 4000), false)
+game.scene.add('Level1', new Level('1', 3500), false)
 game.scene.add('1_End', new LevelEndScreen(1), false)
 game.scene.add('Level2', new Level('2', 3000), false)
 game.scene.add('2_End', new LevelEndScreen(2), false)

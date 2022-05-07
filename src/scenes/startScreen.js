@@ -16,7 +16,7 @@ export default class StartScreen extends Phaser.Scene {
       font: 'bold 52px "VT323"'
     })
       .setOrigin(0.5)
-      .on('pointerdown', () => this.scene.start('1'))
+      .on('pointerdown', () => this.scene.start('1'), {points: 0})
 
     this.add.existing(this.newButton)
   };

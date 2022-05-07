@@ -1,8 +1,9 @@
 import Phaser from "phaser";
 import KeyObject from "../gameObjects/keyObject";
+import TokenPiece from "../gameObjects/tokenPiece";
 
 export default class Level extends Phaser.Scene {
-  constructor(level, speed, cap=5){
+  constructor(level, speed, cap=20){
     super(level);
     this.points = 0;
     this.usedKeys = {}
@@ -31,10 +32,20 @@ export default class Level extends Phaser.Scene {
       frameWidth: 112,
       frameHeight: 112,
     })
+    this.load.spritesheet('catbox', '../../img/catbox.png', {
+      frameWidth: 73,
+      frameHeight: 73
+    })
+    this.load.spritesheet('static', '../../img/static.png', {
+      frameWidth: 73,
+      frameHeight: 73
+    })
   }
 
   init(data){
-    if (data.points) this.points = data.points;
+    this.points = data.points || 0;
+    this.level1 = data.level1;
+    this.level2 = data.level2;
   }
 
   create(){
@@ -78,14 +89,18 @@ export default class Level extends Phaser.Scene {
 
   update(){
     this.scoreText && this.scoreText.setText(this.points.toString() + ' BTC', { align: 'right' })
-    
     if (this.pressCount >= this.cap) {
       let points = this.points;
       this.time.addEvent({
         delay: 1000,
         callback: () => {
           this.points = this.pressCount = this.keyCount = 0;
-          this.scene.start(this.level !== '3' ? this.level + '_End' : 'GameOver', { points: points })
+          this.scene.start(this.level !== '3' ? this.level + '_End' : 'GameOver', { 
+            points: points,
+            sprites: this.children.list.filter(x => x instanceof TokenPiece),
+            level1: this.level1,
+            level2: this.level2
+          })
         },
         loop: false
       });
@@ -118,11 +133,19 @@ export default class Level extends Phaser.Scene {
       callback: () => {
         if (sprite.texture.key === 'keyboard') {
           this.points -= 50
-          this.pressCount++
           let minus = this.add.text(sprite.x, sprite.y - 50, '-50', {
             font: 'bold 42px "VT323"',
             fill: '#FF0000'
           })
+          let piece = new TokenPiece(
+            this,
+            75 + (75 * (this.pressCount % 4)),
+            150 + (75 * Math.floor(this.pressCount / 4)),
+            'static',
+            this.pressCount)
+            .setOrigin(0, 0);
+          this.add.existing(piece);
+          this.pressCount++;
 
           this.time.addEvent({
             delay: 1000,
@@ -145,6 +168,13 @@ export default class Level extends Phaser.Scene {
   }
 
   keyDown(sprite){
+    let piece = new TokenPiece(
+      this, 
+      75 + (75 * (this.pressCount % 4)), 
+      150 + (75 * Math.floor(this.pressCount / 4)),
+      'catbox', 
+      this.pressCount)
+    .setOrigin(0,0);
     if (sprite.y > 500 && sprite.y <= 560){
       sprite.setTexture('keyboard_y', sprite.frame.name)
       this.points += 50;
@@ -177,6 +207,7 @@ export default class Level extends Phaser.Scene {
       sprite.setTexture('keyboard_r', sprite.frame.name)
       this.points -= 20;
       this.pressCount++;
+      piece.setTexture('static')
       let twenty = this.add.text(sprite.x, sprite.y - 50, '-20', {
         font: 'bold 42px "VT323"',
         fill: '#FF0000'
@@ -188,5 +219,6 @@ export default class Level extends Phaser.Scene {
         loop: false
       })
     }
+    this.add.existing(piece)
   }
 }
