@@ -1,10 +1,11 @@
 import Phaser from "phaser";
 import KeyObject from "../gameObjects/keyObject";
 import TokenPiece from "../gameObjects/tokenPiece";
+import {tokenSheets, keyboardSheets, failToken} from "../util/spritesheets";
 
 export default class Level extends Phaser.Scene {
   constructor(level, speed, cap=20){
-    super(level);
+    super(level.toString());
     this.points = 0;
     this.usedKeys = {}
     this.scoreText = null;
@@ -15,42 +16,34 @@ export default class Level extends Phaser.Scene {
     this.cap = cap;
   }
 
-  preload(){
-    this.load.spritesheet('keyboard', '../../img/keyboard_sheet_white.png', {
-      frameWidth: 112,
-      frameHeight: 112,
-    })
-    this.load.spritesheet('keyboard_y', '../../img/keyboard_sheet_yellow.png', {
-      frameWidth: 112,
-      frameHeight: 112,
-    })
-    this.load.spritesheet('keyboard_g', '../../img/keyboard_sheet_green.png', {
-      frameWidth: 112,
-      frameHeight: 112,
-    })
-    this.load.spritesheet('keyboard_r', '../../img/keyboard_sheet_red.png', {
-      frameWidth: 112,
-      frameHeight: 112,
-    })
-    this.load.spritesheet('catbox', '../../img/catbox.png', {
-      frameWidth: 73,
-      frameHeight: 73
-    })
-    this.load.spritesheet('static', '../../img/static.png', {
-      frameWidth: 73,
-      frameHeight: 73
-    })
-  }
-
-  init(data){
+  init(data) {
     this.points = data.points || 0;
     this.level1 = data.level1;
     this.level2 = data.level2;
+    this.tokens = data.tokens;
+    this.curToken = tokenSheets[this.tokens[this.level - 1]]
   }
+
+  preload(){
+    keyboardSheets.map(sheet => {
+      this.load.spritesheet(sheet.key, sheet.filepath, {
+        frameWidth: 112,
+        frameHeight: 112
+      })
+    });
+    this.load.spritesheet(this.curToken.key, this.curToken.filepath, {
+      frameWidth: 73,
+      frameHeight: 73
+    });
+    this.load.spritesheet(failToken.key, failToken.filepath, {
+      frameWidth: 73,
+      frameHeight: 73
+    });
+  };
 
   create(){
     let { width, height } = this.sys.game.canvas;
-    let title = this.add.text(width / 2, height / 2, 'LEVEL ' + this.level, {
+    let title = this.add.text(width / 2, height / 2, 'LEVEL ' + this.level.toString(), {
       font: 'bold 72px "VT323"',
     }).setOrigin(0.5);
 
@@ -81,7 +74,7 @@ export default class Level extends Phaser.Scene {
   startGame(width, height){
     let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     this.time.addEvent({
-      delay: this.speed / (parseInt(this.level) + 1),
+      delay: this.speed / this.level + 1,
       callback: () => this.keyCount < this.cap && this.addKey(width - 112, height, alphabet),
       loop: true
     })
@@ -95,11 +88,12 @@ export default class Level extends Phaser.Scene {
         delay: 1000,
         callback: () => {
           this.points = this.pressCount = this.keyCount = 0;
-          this.scene.start(this.level !== '3' ? this.level + '_End' : 'GameOver', { 
+          this.scene.start(this.level !== 3 ? this.level.toString() + '_End' : 'GameOver', { 
             points: points,
             sprites: this.children.list.filter(x => x instanceof TokenPiece),
             level1: this.level1,
-            level2: this.level2
+            level2: this.level2,
+            tokens: this.tokens
           })
         },
         loop: false
@@ -172,7 +166,7 @@ export default class Level extends Phaser.Scene {
       this, 
       75 + (75 * (this.pressCount % 4)), 
       150 + (75 * Math.floor(this.pressCount / 4)),
-      'catbox', 
+      this.curToken.key, 
       this.pressCount)
     .setOrigin(0,0);
     if (sprite.y > 500 && sprite.y <= 560){

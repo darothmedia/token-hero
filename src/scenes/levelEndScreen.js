@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import { TextButton } from "../gameObjects/textButton";
-import TokenPiece from "../gameObjects/tokenPiece";
+import { tokenSheets, failToken } from "../util/spritesheets";
 
 export default class LevelEndScreen extends Phaser.Scene {
   constructor(levelEnd){
@@ -11,22 +11,25 @@ export default class LevelEndScreen extends Phaser.Scene {
     } else this.nextLevel = 'GameOver'
   }
 
-  preload(){
-    this.load.spritesheet('catbox', '../../img/catbox.png', {
-      frameWidth: 73,
-      frameHeight: 73
-    })
-    this.load.spritesheet('static', '../../img/static.png', {
-      frameWidth: 73,
-      frameHeight: 73
-    })
-  }
-
-  init(data){
+  init(data) {
     this.points = data.points;
     this.levelEnd === 1 ? this.level1 = data.sprites : this.level1 = data.level1;
     this.levelEnd === 2 ? this.level2 = data.sprites : this.level2 = data.level2;
-    console.log(data)
+    this.tokens = data.tokens;
+  }
+
+  preload(){
+    this.tokens.map(tokenID => {
+      let token = tokenSheets[tokenID];
+      this.load.spritesheet(token.key, token.filepath, {
+        frameWidth: 73,
+        frameHeight: 73
+      })
+    });
+    this.load.spritesheet(failToken.key, failToken.filepath, {
+      frameWidth: 73,
+      frameHeight: 73
+    });
   }
 
   create() {
@@ -63,7 +66,8 @@ export default class LevelEndScreen extends Phaser.Scene {
       .on('pointerdown', () => this.scene.start(this.nextLevel, {
         points: this.points,
         level1: this.level1,
-        level2: this.level2 
+        level2: this.level2,
+        tokens: this.tokens
       }))
 
     this.add.existing(this.newButton)

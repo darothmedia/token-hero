@@ -1,5 +1,6 @@
 import Phaser from "phaser";
 import { TextButton } from "../gameObjects/textButton";
+import { tokenSheets, failToken } from "../util/spritesheets";
 
 export default class GameOver extends Phaser.Scene {
   constructor(){
@@ -11,7 +12,21 @@ export default class GameOver extends Phaser.Scene {
     this.level1 = data.level1;
     this.level2 = data.level2;
     this.level3 = data.sprites;
-    console.log(data)
+    this.tokens = data.tokens;
+  }
+
+  preload() {
+    this.tokens.map(tokenID => {
+      let token = tokenSheets[tokenID];
+      this.load.spritesheet(token.key, token.filepath, {
+        frameWidth: 73,
+        frameHeight: 73
+      })
+    });
+    this.load.spritesheet(failToken.key, failToken.filepath, {
+      frameWidth: 73,
+      frameHeight: 73
+    });
   }
 
   create() {
