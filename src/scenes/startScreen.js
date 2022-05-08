@@ -7,19 +7,33 @@ export default class StartScreen extends Phaser.Scene {
     super('StartScreen');
   }
 
-  init(data){
+  init(){
     this.tokenArr = []
+  }
+
+  preload(){
+    this.load.spritesheet('coin', '../../img/anim_coin.png', {
+      frameWidth: 208,
+      frameHeight: 400
+    })
   }
 
   create(){
     let { width, height } = this.sys.game.canvas;
+    const coinFlip = this.anims.create({
+      key: 'flip',
+      frames: this.anims.generateFrameNumbers('coin'),
+      frameRate: 16
+    })
+    const coin1 = this.add.sprite(width / 4, height / 2, 'coin').setOrigin(0.5)
+    const coin2 = this.add.sprite(3 * width / 4, height / 2, 'coin').setOrigin(0.5)
+    coin1.play({key: 'flip', repeat: Infinity})
+    coin2.play({ key: 'flip', repeat: Infinity })
 
     while (this.tokenArr.length < 3) {
       let randNum = Math.floor(Math.random() * tokenSheets.length)
       if (!this.tokenArr.includes(randNum)) this.tokenArr.push(randNum)
     }
-
-    console.log(this.tokenArr)
 
     this.add.text(width / 2, height / 2 - 45, 'Token Hero', {
       font: 'bold 72px "VT323"',

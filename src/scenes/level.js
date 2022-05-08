@@ -21,7 +21,8 @@ export default class Level extends Phaser.Scene {
     this.level1 = data.level1;
     this.level2 = data.level2;
     this.tokens = data.tokens;
-    this.curToken = tokenSheets[this.tokens[this.level - 1]]
+    this.curToken = tokenSheets[this.tokens[this.level - 1]];
+    this.tokenTimer;
   }
 
   preload(){
@@ -73,8 +74,8 @@ export default class Level extends Phaser.Scene {
 
   startGame(width, height){
     let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-    this.time.addEvent({
-      delay: this.speed / this.level + 1,
+    this.tokenTimer = this.time.addEvent({
+      delay: this.speed,
       callback: () => this.keyCount < this.cap && this.addKey(width - 112, height, alphabet),
       loop: true
     })
@@ -82,6 +83,7 @@ export default class Level extends Phaser.Scene {
 
   update(){
     this.scoreText && this.scoreText.setText(this.points.toString() + ' BTC', { align: 'right' })
+    if (this.tokenTimer) this.tokenTimer.delay = (this.speed - (this.keyCount * 70)) 
     if (this.pressCount >= this.cap) {
       let points = this.points;
       this.time.addEvent({
