@@ -20,7 +20,7 @@ export default class StartScreen extends Phaser.Scene {
 
   create(){
     let { width, height } = this.sys.game.canvas;
-    const coinFlip = this.anims.create({
+    this.anims.create({
       key: 'flip',
       frames: this.anims.generateFrameNumbers('coin'),
       frameRate: 16

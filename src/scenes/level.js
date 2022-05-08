@@ -64,8 +64,9 @@ export default class Level extends Phaser.Scene {
   };
 
   setupGame(width, height){
-    this.add.rectangle(0, 0, width * 2, height * 2, 0x0080FF, 1);
-    this.add.line(0, 0, 0, height - 150, width, height - 150, 0xffff00, 1)
+    this.add.rectangle(65, 140, 320, 395, 0x0080FF, 1).setOrigin(0, 0);
+    this.add.rectangle(width / 2, 0, width / 2, height, 0x0080FF, 1).setOrigin(0, 0);
+    this.add.line(width / 2, 0, 0, height - 150, width, height - 150, 0xffff00, 1)
       .setOrigin(0, 0)
       .setStrokeStyle(20, 0xfff000, 0.4)
       .setDepth(0);
@@ -108,10 +109,10 @@ export default class Level extends Phaser.Scene {
     this.keyCount++;
 
     if (!this.usedKeys[keyValue]) this.usedKeys[keyValue] = 0;
-    while (this.usedKeys[keyValue] > 0){ keyValue = Math.floor(Math.random() * 26) };
+    while (this.usedKeys[keyValue] !== 0) { keyValue = Math.floor(Math.random() * 26) };
     this.usedKeys[keyValue]++;
 
-    let sprite = new KeyObject(this, width - Math.random() * width / 2, 0, 'keyboard', keyValue)
+    let sprite = new KeyObject(this, width - (Math.random() * (width - 112) / 2), 0, 'keyboard', keyValue)
       .setOrigin(0, 0)
       .setDepth(1);
     this.add.existing(sprite);
@@ -125,7 +126,7 @@ export default class Level extends Phaser.Scene {
     })
 
     this.time.addEvent({
-      delay: 4000,
+      delay: this.speed,
       callback: () => {
         if (sprite.texture.key === 'keyboard') {
           this.points -= 50
