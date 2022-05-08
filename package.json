@@ -8,7 +8,7 @@
     "watch": "webpack --watch --mode=development",
     "build": "webpack --mode=production",
     "open": "concurrently \"http-server -c-1 -a localhost -p 3000\" \"open http://localhost:3000\"",
-    "start": "concurrently \"npm run watch\" \"npm run open\""
+    "server": "concurrently \"npm run watch\" \"npm run open\""
   },
   "repository": {
     "type": "git",
