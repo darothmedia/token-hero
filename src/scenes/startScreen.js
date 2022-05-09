@@ -49,7 +49,7 @@ export default class StartScreen extends Phaser.Scene {
     })
       .setOrigin(0.5)
       .on('pointerdown', () => {
-        this.data.replay ?
+        this.data.repeat ?
         this.scene.start('1', {
           tokens: this.tokenArr
         }) : this.scene.start('HowToPlay', {
