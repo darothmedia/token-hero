@@ -25,8 +25,8 @@ export default class StartScreen extends Phaser.Scene {
       frames: this.anims.generateFrameNumbers('coin'),
       frameRate: 16
     })
-    const coin1 = this.add.sprite(width / 4, height / 2, 'coin').setOrigin(0.5)
-    const coin2 = this.add.sprite(3 * width / 4, height / 2, 'coin').setOrigin(0.5)
+    const coin1 = this.add.sprite(width / 4 - 100, height / 2, 'coin').setOrigin(0.5)
+    const coin2 = this.add.sprite(3 * width / 4 + 100, height / 2, 'coin').setOrigin(0.5)
     coin1.play({key: 'flip', repeat: Infinity})
     coin2.play({ key: 'flip', repeat: Infinity })
 
@@ -35,12 +35,16 @@ export default class StartScreen extends Phaser.Scene {
       if (!this.tokenArr.includes(randNum)) this.tokenArr.push(randNum)
     }
 
-    this.add.text(width / 2, height / 2 - 45, 'Token Hero', {
-      font: 'bold 72px "VT323"',
+    this.add.text(width / 2, height / 2 - 45, 'TOKEN HERO', {
+      fontFamily: 'VT323, Arial, Helvetica, sans-serif',
+      fontSize: '72px',
+      fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.newButton = new TextButton(this, width / 2, height / 2 + 45, 'START', {
-      font: 'bold 52px "VT323"'
+      fontFamily: 'VT323, Arial, Helvetica, sans-serif',
+      fontSize: '52px',
+      fontStyle: 'bold'
     })
       .setOrigin(0.5)
       .on('pointerdown', () => this.scene.start('1', {

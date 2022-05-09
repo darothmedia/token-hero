@@ -1,3 +1,15 @@
-@font-face{font-family:VT323;src:font-url("https://fonts.googleapis.com/css2?family=VT323&display=swap")}body{background-color:#000}canvas{display:block;margin:0 auto}
+/*!*************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!./node_modules/sass-loader/dist/cjs.js!./src/index.scss ***!
+  \*************************************************************************************************************************************/
+@font-face {
+  font-family: "VT323", Arial, Helvetica, sans-serif;
+  src: font-url("https://fonts.googleapis.com/css2?family=VT323&display=swap");
+}
+body {
+  background-color: black;
+}
 
-/*# sourceMappingURL=main.css.map*/
+canvas {
+  display: block;
+  margin: 0 auto;
+}
