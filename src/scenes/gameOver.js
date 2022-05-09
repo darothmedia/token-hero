@@ -55,18 +55,27 @@ export default class GameOver extends Phaser.Scene {
     })
 
     this.add.text(width / 2, height / 2 - 65, 'GAME OVER', {
-      font: 'bold 72px "VT323"',
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontSize: '62px',
+      fontStyle: 'bold',
     }).setOrigin(0.5);
 
     this.add.text(width / 2, height / 2 - 5, this.points.toString() + ' BTC', {
-      font: 'bold 62px "VT323"',
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontSize: '52px',
+      fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.newButton = new TextButton(this, width / 2, height / 2 + 85, 'EXIT', {
-      font: 'bold 52px "VT323"'
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontSize: '42px',
+      fontStyle: 'bold'
     })
       .setOrigin(0.5)
-      .on('pointerdown', () => this.scene.start('StartScreen', {score: 0}))
+      .on('pointerdown', () => this.scene.start('StartScreen', {
+        score: 0,
+        repeat: true
+      }))
 
     this.add.existing(this.newButton)
   };

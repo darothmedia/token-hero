@@ -7,7 +7,8 @@ export default class StartScreen extends Phaser.Scene {
     super('StartScreen');
   }
 
-  init(){
+  init(data){
+    this.data = data
     this.tokenArr = []
   }
 
@@ -36,21 +37,25 @@ export default class StartScreen extends Phaser.Scene {
     }
 
     this.add.text(width / 2, height / 2 - 45, 'TOKEN HERO', {
-      fontFamily: 'VT323, Arial, Helvetica, sans-serif',
-      fontSize: '72px',
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontSize: '62px',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.newButton = new TextButton(this, width / 2, height / 2 + 45, 'START', {
-      fontFamily: 'VT323, Arial, Helvetica, sans-serif',
+      fontFamily: 'Arial, Helvetica, sans-serif',
       fontSize: '52px',
       fontStyle: 'bold'
     })
       .setOrigin(0.5)
-      .on('pointerdown', () => this.scene.start('1', {
-        points: 0,
-        tokens: this.tokenArr
-      }))
+      .on('pointerdown', () => {
+        this.data.replay ?
+        this.scene.start('1', {
+          tokens: this.tokenArr
+        }) : this.scene.start('HowToPlay', {
+          tokens: this.tokenArr
+        })
+      })
 
     this.add.existing(this.newButton)
   };

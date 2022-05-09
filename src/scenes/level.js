@@ -45,7 +45,9 @@ export default class Level extends Phaser.Scene {
   create(){
     let { width, height } = this.sys.game.canvas;
     let title = this.add.text(width / 2, height / 2, 'LEVEL ' + this.level.toString(), {
-      font: 'bold 72px "VT323"',
+      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontSize: '62px',
+      fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.time.addEvent({
@@ -55,8 +57,9 @@ export default class Level extends Phaser.Scene {
         this.setupGame(width, height);
         this.startGame(width, height);
         this.scoreText = this.add.text(20, 20, this.points.toString() + ' BTC', {
-          font: 'bold 42px "VT323"',
-          align: 'right'
+          fontFamily: 'Arial, Helvetica, sans-serif',
+          fontSize: '32px',
+          fontStyle: 'bold'
         }).setOrigin(0, 0)
       },
       loop: false
@@ -65,7 +68,7 @@ export default class Level extends Phaser.Scene {
 
   setupGame(width, height){
     this.add.rectangle(65, 140, 320, 395, 0x0080FF, 1).setOrigin(0, 0);
-    this.add.rectangle(width / 2, 0, width / 2, height, 0x0080FF, 1).setOrigin(0, 0);
+    this.add.rectangle(width / 2, 0, width / 2, height, 0x0080FF, 0.5).setOrigin(0, 0);
     this.add.line(width / 2, 0, 0, height - 150, width, height - 150, 0xffff00, 1)
       .setOrigin(0, 0)
       .setStrokeStyle(20, 0xfff000, 0.4)
@@ -131,7 +134,9 @@ export default class Level extends Phaser.Scene {
         if (sprite.texture.key === 'keyboard') {
           this.points -= 50
           let minus = this.add.text(sprite.x, sprite.y - 50, '-50', {
-            font: 'bold 42px "VT323"',
+            fontFamily: 'Arial, Helvetica, sans-serif',
+            fontSize: '32px',
+            fontStyle: 'bold',
             fill: '#FF0000'
           })
           let piece = new TokenPiece(
@@ -177,7 +182,9 @@ export default class Level extends Phaser.Scene {
       this.points += 50;
       this.pressCount++;
       let fifty = this.add.text(sprite.x, sprite.y - 50, '+50', {
-        font: 'bold 42px "VT323"',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontSize: '32px',
+        fontStyle: 'bold',
         fill: '#FFFF00'
       })
 
@@ -191,7 +198,9 @@ export default class Level extends Phaser.Scene {
       this.points += 100;
       this.pressCount++;
       let hundred = this.add.text(sprite.x, sprite.y - 50, '+100', {
-        font: 'bold 42px "VT323"',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontSize: '32px',
+        fontStyle: 'bold',
         fill: '#00FF00'
       })
 
@@ -206,7 +215,9 @@ export default class Level extends Phaser.Scene {
       this.pressCount++;
       piece.setTexture('static')
       let twenty = this.add.text(sprite.x, sprite.y - 50, '-20', {
-        font: 'bold 42px "VT323"',
+        fontFamily: 'Arial, Helvetica, sans-serif',
+        fontSize: '32px',
+        fontStyle: 'bold',
         fill: '#FF0000'
       })
 
