@@ -6,14 +6,14 @@ import {tokenSheets, keyboardSheets, failToken} from "../util/spritesheets";
 export default class Level extends Phaser.Scene {
   constructor(level, speed, cap=20){
     super(level.toString());
-    this.points = 0;
-    this.usedKeys = {}
-    this.scoreText = null;
-    this.speed = speed;
     this.level = level;
+    this.speed = speed;
+    this.cap = cap;
+    this.points = 0;
+    this.usedKeys = {};
+    this.scoreText = null;
     this.pressCount = 0;
     this.keyCount = 0;
-    this.cap = cap;
   }
 
   init(data) {
@@ -22,7 +22,6 @@ export default class Level extends Phaser.Scene {
     this.level2 = data.level2;
     this.tokens = data.tokens;
     this.curToken = tokenSheets[this.tokens[this.level - 1]];
-    this.tokenTimer;
   }
 
   preload(){
