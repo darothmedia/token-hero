@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import { TextButton } from "../gameObjects/textButton";
 import { keyboardSheets } from "../util/spritesheets";
 import KeyObject from "../gameObjects/keyObject";
+import { h1, h2, p } from "../config/textConfig";
 
 export default class HowToPlay extends Phaser.Scene {
   constructor() {
@@ -37,26 +38,10 @@ export default class HowToPlay extends Phaser.Scene {
       .setStrokeStyle(20, 0xfff000, 0.4)
       .setDepth(-2);
 
-    this.add.text(width / 2, height / 2 - 125, 'HOW TO PLAY', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '62px',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 - 125, 'HOW TO PLAY', h1).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 + 10, howToText, p(width)).setOrigin(0.5)
 
-    this.add.text(width / 2, height / 2 + 10, howToText, {
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '26px',
-      wordWrap: {
-        width: width / 1.5,
-      },
-      align: 'left',
-    }).setOrigin(0.5)
-
-    this.newButton = new TextButton(this, width / 2, height / 2 + 150, 'START', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '52px',
-      fontStyle: 'bold'
-    })
+    this.newButton = new TextButton(this, width / 2, height / 2 + 150, 'START', h2)
       .setOrigin(0.5)
       .on('pointerdown', () => this.scene.start('1', {
         points: 0,

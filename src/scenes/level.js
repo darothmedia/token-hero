@@ -2,6 +2,7 @@ import Phaser from "phaser";
 import KeyObject from "../gameObjects/keyObject";
 import TokenPiece from "../gameObjects/tokenPiece";
 import {tokenSheets, keyboardSheets, failToken} from "../util/spritesheets";
+import { h1, ptsCount, ptsG, ptsR, ptsY } from "../config/textConfig";
 
 export default class Level extends Phaser.Scene {
   constructor(level, speed, cap=20){
@@ -9,9 +10,7 @@ export default class Level extends Phaser.Scene {
     this.level = level;
     this.speed = speed;
     this.cap = cap;
-    this.points = 0;
     this.usedKeys = {};
-    this.scoreText = null;
     this.pressCount = 0;
     this.keyCount = 0;
   }
@@ -42,44 +41,43 @@ export default class Level extends Phaser.Scene {
   };
 
   create(){
-    let { width, height } = this.sys.game.canvas;
-    let title = this.add.text(width / 2, height / 2, 'LEVEL ' + this.level.toString(), {
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '62px',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+    const {canvas} = this.sys.game
+    this.width = canvas.width;
+    this.height = canvas.height;
+
+    const title = this.add.text(this.width / 2, this.height / 2, 'LEVEL ' + this.level.toString(), h1)
+    .setOrigin(0.5);
 
     this.time.addEvent({
       delay: 1500,
       callback: () => {
         title.destroy();
-        this.setupGame(width, height);
-        this.startGame(width, height);
-        this.scoreText = this.add.text(20, 20, this.points.toString() + ' BTC', {
-          fontFamily: 'Arial, Helvetica, sans-serif',
-          fontSize: '32px',
-          fontStyle: 'bold'
-        }).setOrigin(0, 0)
+        this.setupGame();
+        this.startGame();
       },
       loop: false
     })
   };
 
-  setupGame(width, height){
+  setupGame(){
     this.add.rectangle(65, 140, 320, 395, 0x0080FF, 1).setOrigin(0, 0);
-    this.add.rectangle(width / 2, 0, width / 2, height, 0x0080FF, 0.5).setOrigin(0, 0);
-    this.add.line(width / 2, 0, 0, height - 150, width, height - 150, 0xffff00, 1)
+    this.add.rectangle(
+      this.width / 2, 0, this.width / 2, this.height, 0x0080FF, 0.5)
+      .setOrigin(0, 0);
+    this.add.line(
+      this.width / 2, 0, 0, this.height - 150, this.width, this.height - 150, 0xffff00, 1)
       .setOrigin(0, 0)
       .setStrokeStyle(20, 0xfff000, 0.4)
       .setDepth(0);
-    this.add.grid(75, 150, 300, 375, 75, 75, 0xffffff, 0.5, 0xffffff, 1).setOrigin(0, 0)
+    this.add.grid(75, 150, 300, 375, 75, 75, 0xffffff, 0.5, 0xffffff, 1).setOrigin(0, 0);
+    this.scoreText = this.add.text(20, 20, this.points.toString() + ' BTC', ptsCount).setOrigin(0, 0)
   }
 
-  startGame(width, height){
-    let alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+  startGame(){
+    this.alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
     this.tokenTimer = this.time.addEvent({
       delay: this.speed,
-      callback: () => this.keyCount < this.cap && this.addKey(width - 112, height, alphabet),
+      callback: () => this.keyCount < this.cap && this.addKey(this.alphabet),
       loop: true
     })
   }
@@ -106,7 +104,7 @@ export default class Level extends Phaser.Scene {
     }
   }
 
-  addKey(width, height, alphabet){
+  addKey(){
     let keyValue = Math.floor(Math.random() * 26);
     this.keyCount++;
 
@@ -114,13 +112,14 @@ export default class Level extends Phaser.Scene {
     while (this.usedKeys[keyValue] !== 0) { keyValue = Math.floor(Math.random() * 26) };
     this.usedKeys[keyValue]++;
 
-    let sprite = new KeyObject(this, width - (Math.random() * (width - 112) / 2), 0, 'keyboard', keyValue)
+    let sprite = new KeyObject(
+      this, this.width - 112 - (Math.random() * (this.width - 224) / 2), 0, 'keyboard', keyValue)
       .setOrigin(0, 0)
       .setDepth(1);
     this.add.existing(sprite);
     this.add.tween({
       targets: sprite,
-      y: height,
+      y: this.height,
       ease: "Linear",
       duration: this.speed,
       repeat: 0,
@@ -132,12 +131,7 @@ export default class Level extends Phaser.Scene {
       callback: () => {
         if (sprite.texture.key === 'keyboard') {
           this.points -= 50
-          let minus = this.add.text(sprite.x, sprite.y - 50, '-50', {
-            fontFamily: 'Arial, Helvetica, sans-serif',
-            fontSize: '32px',
-            fontStyle: 'bold',
-            fill: '#FF0000'
-          })
+          let minus = this.add.text(sprite.x, sprite.y - 50, '-50', ptsR)
           let piece = new TokenPiece(
             this,
             75 + (75 * (this.pressCount % 4)),
@@ -161,7 +155,7 @@ export default class Level extends Phaser.Scene {
       loop: false
     })
     
-    let keyPress = this.input.keyboard.addKey(alphabet[sprite.frame.name])
+    let keyPress = this.input.keyboard.addKey(this.alphabet[sprite.frame.name])
     keyPress.on('down', () => {
       this.keyDown(sprite);
       keyPress.destroy();
@@ -180,12 +174,7 @@ export default class Level extends Phaser.Scene {
       sprite.setTexture('keyboard_y', sprite.frame.name)
       this.points += 50;
       this.pressCount++;
-      let fifty = this.add.text(sprite.x, sprite.y - 50, '+50', {
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        fontSize: '32px',
-        fontStyle: 'bold',
-        fill: '#FFFF00'
-      })
+      let fifty = this.add.text(sprite.x, sprite.y - 50, '+50', ptsY)
 
       this.time.addEvent({
         delay: 1000,
@@ -196,12 +185,7 @@ export default class Level extends Phaser.Scene {
       sprite.setTexture('keyboard_g', sprite.frame.name)
       this.points += 100;
       this.pressCount++;
-      let hundred = this.add.text(sprite.x, sprite.y - 50, '+100', {
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        fontSize: '32px',
-        fontStyle: 'bold',
-        fill: '#00FF00'
-      })
+      let hundred = this.add.text(sprite.x, sprite.y - 50, '+100', ptsG)
 
       this.time.addEvent({
         delay: 1000,
@@ -213,12 +197,7 @@ export default class Level extends Phaser.Scene {
       this.points -= 20;
       this.pressCount++;
       piece.setTexture('static')
-      let twenty = this.add.text(sprite.x, sprite.y - 50, '-20', {
-        fontFamily: 'Arial, Helvetica, sans-serif',
-        fontSize: '32px',
-        fontStyle: 'bold',
-        fill: '#FF0000'
-      })
+      let twenty = this.add.text(sprite.x, sprite.y - 50, '-20', ptsR)
 
       this.time.addEvent({
         delay: 1000,

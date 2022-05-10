@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { TextButton } from "../gameObjects/textButton";
 import { tokenSheets } from "../util/spritesheets";
+import {h1, h2, h3, p} from "../config/textConfig";
 
 export default class StartScreen extends Phaser.Scene {
   constructor(){
@@ -36,17 +37,9 @@ export default class StartScreen extends Phaser.Scene {
       if (!this.tokenArr.includes(randNum)) this.tokenArr.push(randNum)
     }
 
-    this.add.text(width / 2, height / 2 - 45, 'TOKEN HERO', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '62px',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 - 45, 'TOKEN HERO', h1).setOrigin(0.5);
 
-    this.newButton = new TextButton(this, width / 2, height / 2 + 45, 'START', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
-      fontSize: '52px',
-      fontStyle: 'bold'
-    })
+    this.newButton = new TextButton(this, width / 2, height / 2 + 45, 'START', h2)
       .setOrigin(0.5)
       .on('pointerdown', () => {
         this.data.repeat ?

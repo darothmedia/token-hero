@@ -52,19 +52,19 @@ export default class LevelEndScreen extends Phaser.Scene {
     })
 
     this.add.text(width / 2, height / 2 - 65, 'LEVEL ' + this.levelEnd + ' COMPLETE', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontFamily: 'Helvetica, sans-serif',
       fontSize: '62px',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.add.text(width / 2, height / 2 - 5, this.points.toString() + ' BTC', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontFamily: 'Helvetica, sans-serif',
       fontSize: '52px',
       fontStyle: 'bold'
     }).setOrigin(0.5);
 
     this.newButton = new TextButton(this, width / 2, height / 2 + 85, 'CONTINUE', {
-      fontFamily: 'Arial, Helvetica, sans-serif',
+      fontFamily: 'Helvetica, sans-serif',
       fontSize: '42px',
       fontStyle: 'bold'
     })
