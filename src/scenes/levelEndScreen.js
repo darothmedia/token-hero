@@ -1,6 +1,7 @@
 import Phaser from "phaser";
 import { TextButton } from "../gameObjects/textButton";
 import { tokenSheets, failToken } from "../util/spritesheets";
+import { h1, h2, h3 } from "../config/textConfig";
 
 export default class LevelEndScreen extends Phaser.Scene {
   constructor(levelEnd){
@@ -51,23 +52,9 @@ export default class LevelEndScreen extends Phaser.Scene {
         .setOrigin(0, 0)
     })
 
-    this.add.text(width / 2, height / 2 - 65, 'LEVEL ' + this.levelEnd + ' COMPLETE', {
-      fontFamily: 'Helvetica, sans-serif',
-      fontSize: '62px',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
-
-    this.add.text(width / 2, height / 2 - 5, this.points.toString() + ' BTC', {
-      fontFamily: 'Helvetica, sans-serif',
-      fontSize: '52px',
-      fontStyle: 'bold'
-    }).setOrigin(0.5);
-
-    this.newButton = new TextButton(this, width / 2, height / 2 + 85, 'CONTINUE', {
-      fontFamily: 'Helvetica, sans-serif',
-      fontSize: '42px',
-      fontStyle: 'bold'
-    })
+    this.add.text(width / 2, height / 2 - 65, 'LEVEL ' + this.levelEnd + ' COMPLETE', h1).setOrigin(0.5);
+    this.add.text(width / 2, height / 2 - 5, this.points.toString() + ' BTC', h2).setOrigin(0.5);
+    this.newButton = new TextButton(this, width / 2, height / 2 + 85, 'CONTINUE', h3)
       .setOrigin(0.5)
       .on('pointerdown', () => this.scene.start(this.nextLevel, {
         points: this.points,
